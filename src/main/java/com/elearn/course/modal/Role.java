@@ -1,10 +1,29 @@
 package com.elearn.course.modal;
 
-import java.util.Objects;
+import jakarta.persistence.*;
+import lombok.*;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+@ToString
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "roles")
 public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id", nullable = false)
     private Long roleId;
+    @Basic
+    @Column(name = "name", nullable = false, length = 45, unique = true)
     private String name;
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    private Set<User> users = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
