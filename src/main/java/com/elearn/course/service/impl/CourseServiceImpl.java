@@ -8,11 +8,13 @@ import com.elearn.course.repository.CourseRepository;
 import com.elearn.course.repository.InstructorRepository;
 import com.elearn.course.service.CourseService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final InstructorRepository instructorRepository;

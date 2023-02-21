@@ -7,9 +7,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@ToString
-@Setter
-@Getter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

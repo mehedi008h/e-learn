@@ -7,9 +7,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@ToString
-@Setter
-@Getter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -34,6 +33,11 @@ public class User {
     private Student student;
     @OneToOne(mappedBy = "user")
     private Instructor instructor;
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     // assign user role
     public void assignRoleToUser(Role role) {
