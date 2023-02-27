@@ -13,4 +13,8 @@ public interface StudentService {
     StudentDTO loadStudentByEmail(String email);
     // find students by name
     Page<StudentDTO> loadStudentByName(String name, int page, int size);
+    // update student
+    StudentDTO updateStudent(StudentDTO studentDTO);
+    // remove student
+    void removeStudent(Long studentId);
 }

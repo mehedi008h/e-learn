@@ -2,6 +2,7 @@ package com.elearn.course.service.impl;
 
 import com.elearn.course.dto.StudentDTO;
 import com.elearn.course.mapper.StudentMapper;
+import com.elearn.course.modal.Course;
 import com.elearn.course.modal.Student;
 import com.elearn.course.modal.User;
 import com.elearn.course.repository.StudentRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -59,6 +61,29 @@ public class StudentServiceImpl implements StudentService {
         return new PageImpl<>(studentPage.getContent()
                 .stream().map(student -> studentMapper.fromStudent(student))
                 .collect(Collectors.toList()), pageRequest, studentPage.getTotalElements());
+    }
+
+    // update student
+    @Override
+    public StudentDTO updateStudent(StudentDTO studentDTO) {
+        Student loadedStudent = loadStudentById(studentDTO.getStudentId());
+        Student student = studentMapper.fromStudentDTO(studentDTO);
+        student.setUser(loadedStudent.getUser());
+        student.setCourses(loadedStudent.getCourses());
+        Student updateStudent = studentRepository.save(student);
+        return studentMapper.fromStudent(updateStudent);
+    }
+
+    // remove student
+    @Override
+    public void removeStudent(Long studentId) {
+        Student student = loadStudentById(studentId);
+        Iterator<Course> courseIterator = student.getCourses().iterator();
+        if (courseIterator.hasNext()) {
+            Course course = courseIterator.next();
+            course.removeStudentFromCourse(student);
+        }
+        studentRepository.deleteById(studentId);
     }
 
 }
