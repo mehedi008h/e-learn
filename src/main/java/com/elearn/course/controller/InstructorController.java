@@ -1,7 +1,9 @@
 package com.elearn.course.controller;
 
+import com.elearn.course.dto.CourseDTO;
 import com.elearn.course.dto.InstructorDTO;
 import com.elearn.course.modal.User;
+import com.elearn.course.service.CourseService;
 import com.elearn.course.service.InstructorService;
 import com.elearn.course.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 public class InstructorController {
     private final UserService userService;
     private final InstructorService instructorService;
+    private final CourseService courseService;
 
     @GetMapping
     public Page<InstructorDTO> searchInstructors(@RequestParam(name = "keyword", defaultValue = "") String keyword,
@@ -51,5 +54,12 @@ public class InstructorController {
     @GetMapping("/find")
     public InstructorDTO loadInstructorByEmail(@RequestParam(name = "email", defaultValue = "") String email) {
         return instructorService.loadInstructorByEmail(email);
+    }
+
+    @GetMapping("/{instructorId}/courses")
+    public Page<CourseDTO> coursesByInstructorId(@PathVariable Long instructorId,
+                                                 @RequestParam(name = "page", defaultValue = "0") int page,
+                                                 @RequestParam(name = "size", defaultValue = "5") int size) {
+        return courseService.fetchCoursesForInstructor(instructorId, page, size);
     }
 }

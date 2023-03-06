@@ -1,7 +1,9 @@
 package com.elearn.course.controller;
 
+import com.elearn.course.dto.CourseDTO;
 import com.elearn.course.dto.StudentDTO;
 import com.elearn.course.modal.User;
+import com.elearn.course.service.CourseService;
 import com.elearn.course.service.StudentService;
 import com.elearn.course.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
     private final StudentService studentService;
     private final UserService userService;
+    private final CourseService courseService;
 
     // search student
     @GetMapping
@@ -48,5 +51,19 @@ public class StudentController {
     @DeleteMapping("/{studentId}")
     public void deleteStudent(@PathVariable Long studentId) {
         studentService.removeStudent(studentId);
+    }
+
+    @GetMapping("/{studentId}/courses")
+    public Page<CourseDTO> coursesByStudentId(@PathVariable Long studentId,
+                                              @RequestParam(name = "page", defaultValue = "0") int page,
+                                              @RequestParam(name = "size", defaultValue = "5") int size) {
+        return courseService.fetchCoursesForStudent(studentId, page, size);
+    }
+
+    @GetMapping("/{studentId}/other-courses")
+    public Page<CourseDTO> nonSubscribedCoursesByStudentId(@PathVariable Long studentId,
+                                                           @RequestParam(name = "page", defaultValue = "0") int page,
+                                                           @RequestParam(name = "size", defaultValue = "5") int size) {
+        return courseService.fetchNonEnrolledInCoursesForStudent(studentId, page, size);
     }
 }

@@ -7,6 +7,7 @@ import com.elearn.course.repository.UserRepository;
 import com.elearn.course.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -15,11 +16,13 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // create user
     @Override
     public User createUser(String email, String password) {
-        return userRepository.save(new User(email, password));
+        String encodedPassword = passwordEncoder.encode(password);
+        return userRepository.save(new User(email, encodedPassword));
     }
 
     // find user by email

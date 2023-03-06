@@ -39,7 +39,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO createCourse(CourseDTO courseDTO) {
         Course course = courseMapper.fromCourseDTO(courseDTO);
         // find instructor
-        Instructor instructor = instructorRepository.findById(course.getInstructor().getInstructorId())
+        Instructor instructor = instructorRepository.findById(courseDTO.getInstructor().getInstructorId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Instructor with ID " + courseDTO.getInstructor().getInstructorId() + " not found!"));
         course.setInstructor(instructor);
